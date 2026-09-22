@@ -1,6 +1,4 @@
 import os
-import time
-
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
@@ -29,6 +27,7 @@ st.write("Translate text between different languages using Gemini AI.")
 
 
 languages = [
+    "Select a language",
     "Afrikaans",
     "Albanian",
     "Amharic",
@@ -112,14 +111,16 @@ if "history" not in st.session_state:
 
 source_language = st.selectbox(
     "Select source language",
-    languages
+    languages,
+    index=0
 )
 
 target_language = st.selectbox(
     "Select target language",
     languages,
-    index=1
+    index=0
 )
+
 
 text = st.text_area(
     "Enter text to translate",
@@ -149,7 +150,10 @@ if clear_button:
 
 if translate_button:
 
-    if not text.strip():
+    if source_language == "Select a language" or target_language == "Select a language":
+        st.warning("Please select both source and target languages.")
+
+    elif not text.strip():
         st.warning("Please enter some text.")
 
     elif source_language == target_language:
